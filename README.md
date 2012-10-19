@@ -1,6 +1,6 @@
 # Buffy
 
-Buffy is a gem for readline files into a buffer
+Buffy is a gem for reading files into a buffer
 
 ## Installation
 
