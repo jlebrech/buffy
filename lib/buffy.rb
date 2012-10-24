@@ -13,13 +13,16 @@ module Buffy
 
     def read_file
       if File.exists? @filename
+       	puts "File Exists"
         File.open(@filename, 'rb') do |f|
           @buffer = f.read
           process_buff
         end
+        return true
       else
         @lines = ""
         @buffer = ""
+        return false
       end
     end
 

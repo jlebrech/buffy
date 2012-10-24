@@ -1,16 +1,24 @@
 require 'spec_helper'
 
 describe Buffy::FileBuffer do
+  before do
+    File.stub(:exists => true, :open => true)
+    @dummy = Buffy::FileBuffer.new("loremipsum.txt")
+  end
+
   it "should have an initializer" do
-    pending "make sure it initialises correctly"
+    Buffy::FileBuffer.any_instance.should_receive(:read_file).and_return(true)
+    Buffy::FileBuffer.new("filename.txt")
   end
 
   it "should read from the file" do
-    pending "stub file open and the output of read"
+    @dummy.should_receive(:process_buff).and_return("")
+    @dummy.read_file
   end
 
   it "should process buffer" do
-    pending "should process a buffer into a line array"
+    @dummy.stub(:buffer => "hello\nworld")
+    @dummy.process_buff.should eql ["hello","world"]
   end
 
   it "should pretty print the buffer and rewrite the lines" do
