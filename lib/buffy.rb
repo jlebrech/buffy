@@ -13,11 +13,9 @@ module Buffy
 
     def read_file
       if File.exists? @filename
-       	puts "File Exists"
-        File.open(@filename, 'rb') do |f|
-          @buffer = f.read
-          process_buff
-        end
+        file = File.open(@filename, 'rb')
+        @buffer = file.read
+        process_buff
         return true
       else
         @lines = ""
@@ -28,6 +26,40 @@ module Buffy
 
     def process_buff
       @lines = @buffer.split("\n")
+      count_line_zeros
     end
-  end
-end
+
+    def line(selection, content = "")
+      if content == "" then
+        if selection.is_a?(Range)
+          output = []
+          selection.each do |i|
+            line_no = i
+            formatted_line_no(line_no)
+            output << "#{formatted_line_no(line_no)}#{@lines[line_no-1]}"
+          end
+          output.join("\n")
+        else
+          "#{formatted_line_no(selection)}#{@lines[selection-1]}"
+        end
+      else
+        @lines[selection-1] = content
+      end
+    end
+
+  private
+   
+    def formatted_line_no(line_no)
+      "#{trailing_zeros(line_no, @zeros)}: "
+    end
+
+    def count_line_zeros
+      @zeros = (@lines.length / 10).to_i
+    end
+
+    def trailing_zeros(line_no, zeros)
+      "%#{zeros}d" % line_no
+    end
+
+  end # end FileBuffer
+end # end buffy
