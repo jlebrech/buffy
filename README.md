@@ -23,8 +23,12 @@ Or install it yourself as:
       => ["hello","world"]
     b.filename
       => "hello_world.txt"
-    b.buffer
-      => "hello\nworld"
+    b.line 1..2
+      => "1: hello\n2: world"
+
+    b.line 1, "goodbye cruel"
+    b.line 1..2
+      => "1: goodbye cruel \n2: world"
 
 ## Contributing
 
