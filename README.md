@@ -20,15 +20,23 @@ Or install it yourself as:
 
     b = Buffy::FileBuffer.new("hello_world.txt")
     b.lines
-      => ["hello","world"]
+    => ["hello","world"]
+
     b.filename
-      => "hello_world.txt"
+    => "hello_world.txt"
+
     b.line 1..2
-      => "1: hello\n2: world"
+      1: hello
+      2: world
+    => false
 
     b.line 1, "goodbye cruel"
+    => true
+
     b.line 1..2
-      => "1: goodbye cruel \n2: world"
+      1: goodbye cruel
+      2: world
+    => false
 
 ## Contributing
 
