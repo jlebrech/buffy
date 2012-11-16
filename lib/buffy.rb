@@ -4,10 +4,11 @@ module Buffy
   class FileBuffer
     attr_accessor :filename, :lines
 
-    def initialize(filename)
-      @filename = filename
+    def initialize(filename, context = $stdout)
+      @filename = File.expand_path(filename)
       @lines = []
       @buffer = ""
+      @context = context
       read_file
     end
 
@@ -38,12 +39,14 @@ module Buffy
             formatted_line_no(line_no)
             output << "#{formatted_line_no(line_no)}#{@lines[line_no-1]}"
           end
-          output.join("\n")
+          @context.puts output.join("\n")
+          return false
         else
           "#{formatted_line_no(selection)}#{@lines[selection-1]}"
         end
       else
         @lines[selection-1] = content
+        return true
       end
     end
 

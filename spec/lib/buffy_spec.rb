@@ -1,40 +1,42 @@
 require 'spec_helper'
 
 describe Buffy::FileBuffer do
+  let(:context){ stub("context") }
+
   before do
     File.stub(:exists => true, :open => true)
-    @dummy = Buffy::FileBuffer.new("loremipsum.txt")
+    Buffy::FileBuffer.any_instance.should_receive(:read_file).and_return(true)
+    @dummy = Buffy::FileBuffer.new("filename.txt", context)
   end
 
-  it "should have an initializer" do
-    Buffy::FileBuffer.any_instance.should_receive(:read_file).and_return(true)
-    Buffy::FileBuffer.new("filename.txt")
+  subject do
+    @dummy
   end
 
   it "should process buffer" do
-    @dummy.instance_variable_set("@buffer", "hello\nworld")
-    @dummy.process_buff
-    @dummy.lines.should eql ["hello","world"]
+    subject.instance_variable_set("@buffer", "hello\nworld")
+    subject.process_buff
+    subject.lines.should eql ["hello","world"]
   end
 
   describe "#line" do
     before do
-      @dummy.instance_variable_set("@buffer", "hello\nworld")
-      @dummy.process_buff
+      subject.instance_variable_set("@buffer", "hello\nworld")
+      subject.process_buff
     end
 
     it "should show me a line" do
-      @dummy.line(2).should eql "2: world"
+      subject.line(2).should eql "2: world"
     end
 
     it "should change a line" do
-      @dummy.line(2, "I am a line")
-      @dummy.line(2).should eql "2: I am a line"
+      subject.line(2, "I am a line")
+      subject.line(2).should eql "2: I am a line"
     end
 
     it "should display a range of lines" do
-      multiline = @dummy.line(1..2)
-      multiline.should eql "1: hello\n2: world"
+      context.should_receive(:puts)
+      multiline = subject.line(1..2)
     end
     it "should replace multiple lines" do
       pending "replace a range of lines with a range of lines from input split by newline character"
@@ -52,6 +54,7 @@ describe Buffy::FileBuffer do
 
   it "should number the lines" do
     pending "write the line number to the text representation of a line"
+    #set @zeros to 3; send line_no 20; output should be " 20: "
   end
 
 
